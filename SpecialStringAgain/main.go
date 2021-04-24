@@ -18,18 +18,28 @@ func substrCount(n int32, s string) int64 {
 	sameChar := true
 
 	for i := 0; i < length; i++ {
-		if s[i] == s[i+1] {
+		lookup := s[i+1]
+
+		if s[i] == lookup {
+			// fmt.Println(s[i : i+2])
 			groups++
 		} else {
 			sameChar = false
 		}
 
-		if i > 0 && i < length && s[i-1] == s[i+1] {
-			groups++
+		for j := 1; (j+i) <= length && (i-j) >= 0; j++ {
+			if s[i-j] == s[i+j] && s[i+j] == lookup {
+				// fmt.Println(s[i-j : i+j+1])
+				groups++
+			} else {
+				break
+			}
 		}
+
 	}
 
 	if sameChar {
+		// fmt.Println(s)
 		groups++
 	}
 
@@ -38,7 +48,7 @@ func substrCount(n int32, s string) int64 {
 
 func main() {
 
-	f, err := os.Open("input-example.txt")
+	f, err := os.Open("./SpecialStringAgain/input-example.txt")
 
 	if err != nil {
 		log.Fatal(err)
