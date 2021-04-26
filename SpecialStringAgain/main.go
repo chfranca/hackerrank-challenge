@@ -12,35 +12,28 @@ import (
 
 // Complete the substrCount function below.
 func substrCount(n int32, s string) int64 {
-	groups := int(n)
+	length := int(n)
 
-	length := int(n) - 1
-	sameChar := true
+	groups := 0
 
 	for i := 0; i < length; i++ {
-		lookup := s[i+1]
+		pivot := s[i]
+		diffChar := -1
 
-		if s[i] == lookup {
-			// fmt.Println(s[i : i+2])
-			groups++
-		} else {
-			sameChar = false
-		}
-
-		for j := 1; (j+i) <= length && (i-j) >= 0; j++ {
-			if s[i-j] == s[i+j] && s[i+j] == lookup {
-				// fmt.Println(s[i-j : i+j+1])
-				groups++
+		for j := i + 1; j < length; j++ {
+			curChar := s[j]
+			if pivot == curChar {
+				if diffChar == -1 || (j-diffChar) == (diffChar-i) {
+					groups++
+				}
 			} else {
-				break
+				if diffChar == -1 {
+					diffChar = j
+				} else {
+					break
+				}
 			}
 		}
-
-	}
-
-	if sameChar {
-		// fmt.Println(s)
-		groups++
 	}
 
 	return int64(groups)
@@ -48,7 +41,7 @@ func substrCount(n int32, s string) int64 {
 
 func main() {
 
-	f, err := os.Open("./SpecialStringAgain/input-example.txt")
+	f, err := os.Open("./SpecialStringAgain/case2.txt")
 
 	if err != nil {
 		log.Fatal(err)
@@ -75,7 +68,19 @@ func main() {
 
 	result := substrCount(n, s)
 
-	fmt.Println(result)
+	scanner.Scan()
+	out := scanner.Text()
+	temp, err := strconv.ParseInt(out, 10, 64)
+	checkError(err)
+	expectedOutput := int32(temp)
+
+	if expectedOutput == int32(result) {
+		fmt.Println("Passou")
+	} else {
+		fmt.Println("Rejeitado")
+	}
+
+	fmt.Println("Encontrou =>", result, "esperava =>", expectedOutput)
 }
 
 func readLine(reader *bufio.Reader) string {
