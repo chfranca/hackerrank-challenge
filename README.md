@@ -1,2 +1,2 @@
 # hackerhank-challenge
-Examples solves challenges from hacker hank
+Examples solves challenges from hacker rank
